@@ -449,6 +449,7 @@ function validate(idx) {
 
 function go(dir) {
   if (!validate(cur)) return;
+  if (dir === 1 && cur === QUESTIONS.length) submitToSupabase();
   const next = cur + dir;
   if (next < 0 || next >= TOTAL) return;
 
@@ -536,15 +537,6 @@ async function submitToSupabase() {
   } catch(e) { console.error('Supabase error', e); }
 }
 
-// Intercept last question advance to submit before closing slide
-const _go = go;
-function go(dir) {
-  if (dir === 1 && cur === QUESTIONS.length) {
-    if (!validate(cur)) return;
-    submitToSupabase();
-  }
-  _go(dir);
-}
 
 buildSlides();
 document.getElementById('slide-0').classList.add('active');
