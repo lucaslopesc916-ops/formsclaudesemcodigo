@@ -282,6 +282,22 @@
   </div>
 
 <script>
+/* ─────────────────────────────────────────────
+   CONFIGURAÇÃO — edite aqui para cada curso
+───────────────────────────────────────────── */
+const CONFIG = {
+  logo:           'Winner.AI',
+  titulo:         'Onboarding',
+  subtitulo:      '',               // ex: 'Curso de IA Aplicada'
+  descricao:      'Leva alguns minutos. Me ajuda a personalizar sua experiência.',
+  encerramento:   'Você concluiu. Obrigado.',
+  msgFinal:       'Suas respostas foram recebidas. Em breve entro em contato.',
+  assinatura:     '— Lucas',
+};
+/* ─────────────────────────────────────────────
+   FIM DA CONFIGURAÇÃO
+───────────────────────────────────────────── */
+
 const QUESTIONS = [
   { id:1,  sec:"Dados básicos",            text:"Seu nome completo",                                          type:"text",     req:true  },
   { id:2,  sec:"Dados básicos",            text:"E-mail de compra",                                          type:"email",    req:true  },
@@ -313,9 +329,9 @@ function buildSlides() {
   const wrap = document.getElementById('form-wrap');
 
   wrap.appendChild(makeSlide('slide-0', 'slide welcome', `
-    <div class="logo">Winner.AI</div>
-    <h1>Onboarding:<br>Mentoria de IA</h1>
-    <p>Leva 4 minutos.<br>Me ajuda a personalizar sua jornada nas próximas 8 semanas.</p>
+    <div class="logo">${CONFIG.logo}</div>
+    <h1>${CONFIG.titulo}${CONFIG.subtitulo ? '<br>' + CONFIG.subtitulo : ''}</h1>
+    <p>${CONFIG.descricao}</p>
     <button class="btn" onclick="go(1)">Começar →</button>
   `));
 
@@ -378,10 +394,9 @@ function buildSlides() {
 
   wrap.appendChild(makeSlide(`slide-${QUESTIONS.length+1}`, 'slide closing', `
     <div class="tag">Concluído</div>
-    <h2>Você concluiu.<br>Obrigado.</h2>
-    <p>Nas próximas 8 semanas, vamos transformar o que você respondeu aqui em resultado real.</p>
-    <p style="margin-top:.9rem">Conte comigo.</p>
-    <div class="sig">— Lucas</div>
+    <h2>${CONFIG.encerramento}</h2>
+    <p>${CONFIG.msgFinal}</p>
+    <div class="sig">${CONFIG.assinatura}</div>
   `));
 }
 
