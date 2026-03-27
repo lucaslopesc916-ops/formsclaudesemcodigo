@@ -27,3 +27,6 @@ create policy "allow_insert" on mentoria_submissions
 
 create policy "allow_select" on mentoria_submissions
   for select to anon using (true);
+
+create policy "allow_delete" on mentoria_submissions
+  for delete to anon using (true);

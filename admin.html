@@ -157,8 +157,16 @@
     #search::placeholder { color: var(--dim2); }
 
     /* cards */
-    .card { border: 1px solid var(--border); margin-bottom: 0.55rem; transition: border-color 0.15s; }
+    .card { border: 1px solid var(--border); margin-bottom: 0.55rem; transition: border-color 0.15s, opacity 0.3s; }
     .card:hover { border-color: rgba(255,255,255,0.2); }
+    .card.deleting { opacity: 0.3; pointer-events: none; }
+    .del-btn {
+      font-size: 0.7rem; color: var(--dim2); background: transparent;
+      border: 1px solid transparent; padding: 0.25rem 0.5rem;
+      cursor: pointer; font-family: 'Inter', sans-serif; flex-shrink: 0;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .del-btn:hover { color: #ff5c5c; border-color: rgba(255,92,92,0.4); }
     .card-header {
       display: flex; align-items: center; padding: 1rem 1.25rem;
       cursor: pointer; user-select: none; gap: 1rem;
@@ -509,6 +517,7 @@ function renderCards(data) {
           <span>${r.whatsapp || '—'}</span>
         </span>
         <span class="card-date">${dateStr} · ${timeStr}</span>
+        <button class="del-btn" onclick="deleteEntry(event,'${r.id}',${i})" title="Excluir">✕</button>
         <span class="chevron">▼</span>
       </div>
       <div class="card-body">
@@ -555,6 +564,25 @@ function renderCards(data) {
 
 function toggleCard(i) {
   document.getElementById(`card-${i}`).classList.toggle('open');
+}
+
+async function deleteEntry(e, id, i) {
+  e.stopPropagation();
+  if (!confirm('Excluir essa resposta?')) return;
+  const card = document.getElementById(`card-${i}`);
+  card.classList.add('deleting');
+  try {
+    await fetch(`${SUPABASE_URL}/rest/v1/mentoria_submissions?id=eq.${id}`, {
+      method: 'DELETE',
+      headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` }
+    });
+    allData = allData.filter(r => r.id !== id);
+    renderCards(allData);
+    renderDashboard(allData);
+  } catch(e) {
+    card.classList.remove('deleting');
+    alert('Erro ao excluir.');
+  }
 }
 
 function filterCards() {
