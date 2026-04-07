@@ -512,7 +512,7 @@ function renderClosing() {
     btn = "";
   } else {
     tag = "Aplicação recebida";
-    h2  = "Maravilha! Vamos analisar sua aplicação com muito carinho.";
+    h2  = "Maravilha! Vamos analisar sua aplicação e te enviamos mensagem em até 24h!";
     p   = "Agora clique no botão abaixo pra falar no WhatsApp sobre sua aplicação e tirar qualquer dúvida 👇";
     btn = `<a class="btn" style="margin-top:2rem;text-decoration:none" href="${WHATSAPP_URL}" target="_blank" rel="noopener">Falar no WhatsApp →</a>`;
   }
@@ -538,6 +538,7 @@ function go(dir) {
   if (next < 0 || next >= TOTAL) return;
   if (dir === 1 && next === TOTAL-1) {
     submitToSupabase();
+    notifyStevo();
     renderClosing();
   }
 
@@ -587,6 +588,48 @@ document.addEventListener('keydown', e => {
     }
   }
 });
+
+const STEVO_URL    = 'https://smv2-8.stevo.chat';
+const STEVO_KEY    = '1769036519293fRvOnazfAzj4wi2q';
+const STEVO_NUMBER = '5534988213494';
+
+async function notifyStevo() {
+  const f = (label, val) => val ? `*${label}:* ${val}\n` : '';
+  const text =
+    `🚀 *Novo lead — Aceleração com IA*\n\n` +
+    f('Nome', answers[1]) +
+    f('E-mail', answers[2]) +
+    f('WhatsApp', answers[3]) +
+    f('Instagram', answers[4]) +
+    `\n` +
+    f('O que faz', answers[5]) +
+    f('Tempo de trabalho', answers[6]) +
+    f('Tamanho empresa', answers[7]) +
+    f('Tamanho time', answers[8]) +
+    `\n` +
+    f('IA no dia a dia', answers[9]) +
+    f('Maturidade IA', answers[10]) +
+    f('Ferramentas IA', answers[11]) +
+    f('Travamentos', Array.isArray(answers[12]) ? answers[12].join(' | ') : answers[12]) +
+    `\n` +
+    f('O que vende', answers[13]) +
+    f('Problema 30 dias', answers[14]) +
+    f('Sucesso 8 semanas', answers[15]) +
+    f('Como conheceu', answers[16]) +
+    f('Info adicional', answers[17]) +
+    `\n🎯 *Qualificação*\n` +
+    f('Disponibilidade', answers[19]) +
+    f('Investimento', answers[20]) +
+    f('Quer cursos', answers[22]);
+
+  try {
+    await fetch(`${STEVO_URL}/send/text`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'apikey': STEVO_KEY },
+      body: JSON.stringify({ delay: 1, formatJid: true, number: STEVO_NUMBER, text })
+    });
+  } catch (e) { console.error('Stevo error', e); }
+}
 
 const SUPABASE_URL = 'https://errofscpxzcbhloutdpb.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVycm9mc2NweHpjYmhsb3V0ZHBiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1NTM1OTIsImV4cCI6MjA5MDEyOTU5Mn0.KLrdir04-WdKkSUYqCZvFeyB36qb2MyBX60szAXfWLI';
