@@ -287,11 +287,11 @@
 ───────────────────────────────────────────── */
 const CONFIG = {
   logo:           'Olucaslopesc',
-  titulo:         'Primeiros passos',
+  titulo:         'Vamos conversar',
   subtitulo:      '',               // ex: 'Curso de IA Aplicada'
-  descricao:      'Leva alguns minutos. Me ajuda a personalizar sua experiência.',
-  encerramento:   'Você concluiu. Obrigado.',
-  msgFinal:       'Suas respostas foram recebidas.',
+  descricao:      'Leva alguns minutos. Me ajuda a entender seu contexto antes de entrarmos em contato.',
+  encerramento:   'Recebido. Obrigado.',
+  msgFinal:       'Vou analisar suas respostas e te chamo em breve.',
   assinatura:     '— Lucas',
 };
 /* ─────────────────────────────────────────────
@@ -300,7 +300,7 @@ const CONFIG = {
 
 const QUESTIONS = [
   { id:1,  sec:"Dados básicos",            text:"Seu nome completo",                                          type:"text",     req:true  },
-  { id:2,  sec:"Dados básicos",            text:"E-mail de compra",                                          type:"email",    req:true  },
+  { id:2,  sec:"Dados básicos",            text:"Seu melhor e-mail",                                          type:"email",    req:true  },
   { id:3,  sec:"Dados básicos",            text:"WhatsApp",                                                   type:"tel",      req:true  },
   { id:4,  sec:"Dados básicos",            text:"@ do Instagram",                                            type:"text",     req:true,  ph:"@seuinstagram" },
   { id:5,  sec:"Sobre você e seu negócio", text:"O que você faz?",                                           type:"text",     hint:"Uma frase. Ex: Empresário no ramo de saúde / Líder comercial em indústria" },
@@ -315,9 +315,34 @@ const QUESTIONS = [
   { id:13, sec:"Intenção e expectativa",   text:"O que você vende ou entrega hoje?",                         type:"textarea", hint:"Descreva brevemente suas ofertas ou serviços." },
   { id:14, sec:"Intenção e expectativa",   text:"Se eu pudesse resolver UM problema pra você nos próximos 30 dias, qual seria?", type:"textarea", hint:"Seja específico. Quanto mais claro, mais consigo te ajudar." },
   { id:15, sec:"Intenção e expectativa",   text:"Daqui a 8 semanas, o que significa sucesso pra você?",      type:"textarea", hint:"O que você quer ter implementado, automatizado ou resolvido? Seja específico." },
-  { id:16, sec:"Intenção e expectativa",   text:"O que te fez entrar na mentoria?",                          type:"textarea" },
+  { id:16, sec:"Intenção e expectativa",   text:"Como você conheceu meu trabalho?",                          type:"radio", req:true,
+    opts:["Instagram","YouTube","Indicação de alguém","Evento presencial","LinkedIn","Outro"] },
   { id:17, sec:"Intenção e expectativa",   text:"Tem algo que você gostaria que eu soubesse sobre você antes de começar?", type:"textarea", hint:"Opcional. Mas se tiver algo relevante, me conta aqui." },
+  { id:18, sec:"O Programa", type:"info",
+    title:"Programa de Aceleração de Negócios com IA",
+    body:`Perfeito! Então eu quero te apresentar o <b>Programa de Aceleração de Negócios com IA</b>.<br><br>
+Dentro do programa, você terá acesso não a um curso… mas a um <b>PLANO</b>:<br><br>
+➡️ diagnóstico estratégico individualizado – feito por mim.<br>
+➡️ plano claro do que construir – desenhado a quatro mãos, eu e você.<br>
+➡️ acompanhamento direto comigo.<br>
+➡️ mentorias individuais comigo.<br>
+➡️ ambiente estratégico de troca com outros participantes e grupo vip do seu negócio.<br>
+➡️ proximidade real com quem tá no campo de batalha todos os dias.` },
+  { id:19, sec:"Qualificação", text:"Você tem disponibilidade de tempo pra executar o plano que for traçado na mentoria?", type:"radio", req:true,
+    opts:["Sim, tenho tempo e energia pra isso","Tenho pouco tempo, mas dou um jeito","Não, no momento não"] },
+  { id:20, sec:"Qualificação", text:"Esse é um programa de mentoria com investimento na faixa de 5k a 12k. Você tem condições de investir nesse momento sem comprometer sua operação?", type:"radio", req:true,
+    opts:["Sim, com certeza consigo","Sim, mas com planejamento","Não nesse momento"] },
+  { id:21, sec:"Outra opção", type:"info",
+    showIf: () => answers[20] === "Não nesse momento",
+    title:"Sem problema — tenho outro caminho pra você",
+    body:`Entendo o momento. Eu tenho <b>cursos 100% mão na massa</b> que podem ser o início perfeito da sua jornada com IA — você aprende no seu ritmo e já começa a aplicar no seu negócio.<br><br>Pode ser exatamente o passo certo agora.` },
+  { id:22, sec:"Outra opção", text:"Quer acessar?", type:"radio", req:true,
+    showIf: () => answers[20] === "Não nesse momento",
+    opts:["Sim, quero conhecer os cursos","Não, obrigado"] },
 ];
+
+const WHATSAPP_URL = 'https://wa.me/5534997285143?text=Oi%20Lucas%2C%20acabei%20de%20enviar%20minha%20aplica%C3%A7%C3%A3o';
+const CURSOS_URL   = 'https://pay.kiwify.com.br/9z7AF2U';
 
 const KEYS = 'ABCDEFGHIJKLMNOP';
 const answers = {};
@@ -340,6 +365,17 @@ function buildSlides() {
     const hint = q.hint ? `<div class="q-hint">${q.hint}</div>` : '';
     let body = '';
 
+    if (q.type === 'info') {
+      wrap.appendChild(makeSlide(`slide-${i+1}`, 'slide', `
+        <div class="q-section">${q.sec}</div>
+        <div class="q-text" style="margin-bottom:1.4rem">${q.title}</div>
+        <div style="border-left:2px solid #fff;padding:1.1rem 1.3rem;background:rgba(255,255,255,0.04)">
+          <p style="font-size:1rem;color:#fff;line-height:1.85;font-weight:300">${q.body}</p>
+        </div>
+        <button class="btn-continue" onclick="go(1)">Continuar →</button>
+      `));
+      return;
+    }
     if (q.type === 'text' || q.type === 'email' || q.type === 'tel') {
       body = `
         <input class="input-line" id="inp-${q.id}" type="${q.type}"
@@ -392,12 +428,7 @@ function buildSlides() {
     `));
   });
 
-  wrap.appendChild(makeSlide(`slide-${QUESTIONS.length+1}`, 'slide closing', `
-    <div class="tag">Concluído</div>
-    <h2>${CONFIG.encerramento}</h2>
-    <p>${CONFIG.msgFinal}</p>
-    <div class="sig">${CONFIG.assinatura}</div>
-  `));
+  wrap.appendChild(makeSlide(`slide-${QUESTIONS.length+1}`, 'slide closing', ''));
 }
 
 function makeSlide(id, cls, html) {
@@ -448,6 +479,7 @@ function refreshChkAnswer(qId) {
 function validate(idx) {
   if (idx === 0 || idx === QUESTIONS.length+1) return true;
   const q = QUESTIONS[idx-1];
+  if (q.showIf && !q.showIf()) return true;
   if (!q.req) return true;
   const err = document.getElementById(`err-${q.id}`);
   let ok = false;
@@ -462,11 +494,52 @@ function validate(idx) {
   return ok;
 }
 
+function renderClosing() {
+  const el = document.getElementById(`slide-${QUESTIONS.length+1}`);
+  if (!el) return;
+  const wantsCursos = answers[22] === "Sim, quero conhecer os cursos";
+  const semGrana    = answers[20] === "Não nesse momento";
+  let tag, h2, p, btn;
+  if (wantsCursos) {
+    tag = "Bora começar";
+    h2  = "Ótimo! Vou te mandar o acesso aos cursos.";
+    p   = "Clique no botão abaixo pra conhecer os cursos mão na massa 👇";
+    btn = `<a class="btn" style="margin-top:2rem;text-decoration:none" href="${CURSOS_URL}" target="_blank" rel="noopener">Ver os cursos →</a>`;
+  } else if (semGrana) {
+    tag = "Recebido";
+    h2  = "Obrigado pela sua sinceridade.";
+    p   = "Quando fizer sentido pra você, volta aqui. Te desejo muito sucesso na sua jornada.";
+    btn = "";
+  } else {
+    tag = "Aplicação recebida";
+    h2  = "Maravilha! Vamos analisar sua aplicação com muito carinho.";
+    p   = "Agora clique no botão abaixo pra falar no WhatsApp sobre sua aplicação e tirar qualquer dúvida 👇";
+    btn = `<a class="btn" style="margin-top:2rem;text-decoration:none" href="${WHATSAPP_URL}" target="_blank" rel="noopener">Falar no WhatsApp →</a>`;
+  }
+  el.innerHTML = `
+    <div class="tag">${tag}</div>
+    <h2>${h2}</h2>
+    <p>${p}</p>
+    ${btn}
+    <div class="sig">${CONFIG.assinatura}</div>
+  `;
+}
+
+function slideVisible(idx) {
+  if (idx === 0 || idx === QUESTIONS.length+1) return true;
+  const q = QUESTIONS[idx-1];
+  return !q.showIf || q.showIf();
+}
+
 function go(dir) {
   if (!validate(cur)) return;
-  if (dir === 1 && cur === QUESTIONS.length) submitToSupabase();
-  const next = cur + dir;
+  let next = cur + dir;
+  while (next > 0 && next < TOTAL-1 && !slideVisible(next)) next += dir;
   if (next < 0 || next >= TOTAL) return;
+  if (dir === 1 && next === TOTAL-1) {
+    submitToSupabase();
+    renderClosing();
+  }
 
   const fromEl = document.getElementById(`slide-${cur}`);
   const toEl   = document.getElementById(`slide-${next}`);
@@ -535,11 +608,14 @@ async function submitToSupabase() {
     o_que_vende:      answers[13] || null,
     problema_30_dias: answers[14] || null,
     sucesso_8_semanas:answers[15] || null,
-    motivo_mentoria:  answers[16] || null,
+    como_conheceu:    answers[16] || null,
     info_adicional:   answers[17] || null,
+    disponibilidade:  answers[19] || null,
+    investimento:     answers[20] || null,
+    quer_cursos:      answers[22] || null,
   };
   try {
-    await fetch(`${SUPABASE_URL}/rest/v1/mentoria_submissions`, {
+    await fetch(`${SUPABASE_URL}/rest/v1/leads_aceleracao`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
