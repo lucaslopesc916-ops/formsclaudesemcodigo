@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Onboarding · Mentoria de IA — Winner.AI</title>
+  <title>Consultoria de IA — Winner.AI</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
@@ -287,12 +287,12 @@
 ───────────────────────────────────────────── */
 const CONFIG = {
   logo:           'Olucaslopesc',
-  titulo:         'Vamos conversar',
+  titulo:         'Consultoria de IA',
   subtitulo:      '',               // ex: 'Curso de IA Aplicada'
-  descricao:      'Leva alguns minutos. Me ajuda a entender seu contexto antes de entrarmos em contato.',
-  encerramento:   'Recebido. Obrigado.',
-  msgFinal:       'Vou analisar suas respostas e te chamo em breve.',
-  assinatura:     '— Lucas',
+  descricao:      'Preencha o formulário abaixo para agendar uma reunião de consultoria. Nosso time vai analisar o seu perfil para verificar se conseguimos te ajudar.',
+  encerramento:   'Aplicação enviada!',
+  msgFinal:       'Nosso time vai analisar seu perfil e entrar em contato em breve.',
+  assinatura:     '— Equipe Lucas',
 };
 /* ─────────────────────────────────────────────
    FIM DA CONFIGURAÇÃO
@@ -318,19 +318,17 @@ const QUESTIONS = [
   { id:16, sec:"Intenção e expectativa",   text:"Como você conheceu meu trabalho?",                          type:"radio", req:true,
     opts:["Instagram","YouTube","Indicação de alguém","Evento presencial","LinkedIn","Outro"] },
   { id:17, sec:"Intenção e expectativa",   text:"Tem algo que você gostaria que eu soubesse sobre você antes de começar?", type:"textarea", hint:"Opcional. Mas se tiver algo relevante, me conta aqui." },
-  { id:18, sec:"O Programa", type:"info",
-    title:"Programa de Aceleração de Negócios com IA",
-    body:`Perfeito! Então eu quero te apresentar o <b>Programa de Aceleração de Negócios com IA</b>.<br><br>
-Dentro do programa, você terá acesso não a um curso… mas a um <b>PLANO</b>:<br><br>
-➡️ diagnóstico estratégico individualizado – feito por mim.<br>
-➡️ plano claro do que construir – desenhado a quatro mãos, eu e você.<br>
-➡️ acompanhamento direto comigo.<br>
-➡️ mentorias individuais comigo.<br>
-➡️ ambiente estratégico de troca com outros participantes e grupo vip do seu negócio.<br>
-➡️ proximidade real com quem tá no campo de batalha todos os dias.` },
-  { id:19, sec:"Qualificação", text:"Você tem disponibilidade de tempo pra executar o plano que for traçado na mentoria?", type:"radio", req:true,
+  { id:18, sec:"A Consultoria", type:"info",
+    title:"Como funciona a reunião de consultoria",
+    body:`Ótimo! Agora que temos suas informações, veja como funciona:<br><br>
+➡️ <b>Nosso time analisa seu perfil</b> — entendemos seu momento, desafios e objetivos.<br>
+➡️ <b>Validamos se conseguimos te ajudar</b> — nem todo perfil é um fit, e preferimos ser honestos.<br>
+➡️ <b>Se fizer sentido, agendamos uma reunião de consultoria</b> — personalizada pro seu contexto.<br>
+➡️ <b>Na reunião, traçamos um plano</b> — diagnóstico + próximos passos claros pra você.<br><br>
+Nosso objetivo é garantir que você saia da reunião com clareza sobre o que fazer com IA no seu negócio.` },
+  { id:19, sec:"Qualificação", text:"Você tem disponibilidade de tempo pra participar da consultoria e executar o que for traçado?", type:"radio", req:true,
     opts:["Sim, tenho tempo e energia pra isso","Tenho pouco tempo, mas dou um jeito","Não, no momento não"] },
-  { id:20, sec:"Qualificação", text:"Esse é um programa de mentoria com investimento na faixa de 5k a 12k. Você tem condições de investir nesse momento sem comprometer sua operação?", type:"radio", req:true,
+  { id:20, sec:"Qualificação", text:"Caso nosso time identifique que podemos te ajudar, a consultoria pode envolver um investimento na faixa de 5k a 12k. Isso faz sentido pra você nesse momento?", type:"radio", req:true,
     opts:["Sim, com certeza consigo","Sim, mas com planejamento","Não nesse momento"] },
   { id:21, sec:"Outra opção", type:"info",
     showIf: () => answers[20] === "Não nesse momento",
@@ -511,9 +509,9 @@ function renderClosing() {
     p   = "Quando fizer sentido pra você, volta aqui. Te desejo muito sucesso na sua jornada.";
     btn = "";
   } else {
-    tag = "Aplicação recebida";
-    h2  = "Maravilha! Vamos analisar sua aplicação e te enviamos mensagem em até 24h!";
-    p   = "Agora clique no botão abaixo pra falar no WhatsApp sobre sua aplicação e tirar qualquer dúvida 👇";
+    tag = "Formulário enviado";
+    h2  = "Recebemos suas informações! Nosso time vai analisar seu perfil e verificar se conseguimos te ajudar.";
+    p   = "Se fizer sentido, entraremos em contato para agendar sua reunião de consultoria. Fique de olho no WhatsApp! 👇";
     btn = `<a class="btn" style="margin-top:2rem;text-decoration:none" href="${WHATSAPP_URL}" target="_blank" rel="noopener">Falar no WhatsApp →</a>`;
   }
   el.innerHTML = `
@@ -538,7 +536,6 @@ function go(dir) {
   if (next < 0 || next >= TOTAL) return;
   if (dir === 1 && next === TOTAL-1) {
     submitToSupabase();
-    notifyStevo();
     renderClosing();
   }
 
@@ -588,48 +585,6 @@ document.addEventListener('keydown', e => {
     }
   }
 });
-
-const STEVO_URL    = 'https://smv2-8.stevo.chat';
-const STEVO_KEY    = '1769036519293fRvOnazfAzj4wi2q';
-const STEVO_NUMBER = '5534988213494';
-
-async function notifyStevo() {
-  const f = (label, val) => val ? `*${label}:* ${val}\n` : '';
-  const text =
-    `🚀 *Novo lead — Aceleração com IA*\n\n` +
-    f('Nome', answers[1]) +
-    f('E-mail', answers[2]) +
-    f('WhatsApp', answers[3]) +
-    f('Instagram', answers[4]) +
-    `\n` +
-    f('O que faz', answers[5]) +
-    f('Tempo de trabalho', answers[6]) +
-    f('Tamanho empresa', answers[7]) +
-    f('Tamanho time', answers[8]) +
-    `\n` +
-    f('IA no dia a dia', answers[9]) +
-    f('Maturidade IA', answers[10]) +
-    f('Ferramentas IA', answers[11]) +
-    f('Travamentos', Array.isArray(answers[12]) ? answers[12].join(' | ') : answers[12]) +
-    `\n` +
-    f('O que vende', answers[13]) +
-    f('Problema 30 dias', answers[14]) +
-    f('Sucesso 8 semanas', answers[15]) +
-    f('Como conheceu', answers[16]) +
-    f('Info adicional', answers[17]) +
-    `\n🎯 *Qualificação*\n` +
-    f('Disponibilidade', answers[19]) +
-    f('Investimento', answers[20]) +
-    f('Quer cursos', answers[22]);
-
-  try {
-    await fetch(`${STEVO_URL}/send/text`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'apikey': STEVO_KEY },
-      body: JSON.stringify({ delay: 1, formatJid: true, number: STEVO_NUMBER, text })
-    });
-  } catch (e) { console.error('Stevo error', e); }
-}
 
 const SUPABASE_URL = 'https://errofscpxzcbhloutdpb.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVycm9mc2NweHpjYmhsb3V0ZHBiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1NTM1OTIsImV4cCI6MjA5MDEyOTU5Mn0.KLrdir04-WdKkSUYqCZvFeyB36qb2MyBX60szAXfWLI';
