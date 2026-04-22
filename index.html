@@ -613,7 +613,7 @@ async function submitToSupabase() {
     quer_cursos:      answers[22] || null,
   };
   try {
-    await fetch(`${SUPABASE_URL}/rest/v1/leads_consultoria`, {
+    await fetch(`${SUPABASE_URL}/rest/v1/alunos_claude_na_pratica`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
