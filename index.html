@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Consultoria de IA — Winner.AI</title>
+  <title>Diagnóstico de IA — Winner.AI</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
@@ -287,9 +287,9 @@
 ───────────────────────────────────────────── */
 const CONFIG = {
   logo:           'Olucaslopesc',
-  titulo:         'Consultoria de IA',
+  titulo:         'Diagnóstico de IA',
   subtitulo:      '',               // ex: 'Curso de IA Aplicada'
-  descricao:      'Preencha o formulário abaixo para agendar uma reunião de consultoria. Nosso time vai analisar o seu perfil para verificar se conseguimos te ajudar.',
+  descricao:      'Preencha o formulário abaixo para agendar uma reunião de diagnóstico. Nosso time vai analisar o seu perfil para verificar se conseguimos te ajudar.',
   encerramento:   'Aplicação enviada!',
   msgFinal:       'Nosso time vai analisar seu perfil e entrar em contato em breve.',
   assinatura:     '— Equipe Lucas',
@@ -318,17 +318,17 @@ const QUESTIONS = [
   { id:16, sec:"Intenção e expectativa",   text:"Como você conheceu meu trabalho?",                          type:"radio", req:true,
     opts:["Instagram","YouTube","Indicação de alguém","Evento presencial","LinkedIn","Outro"] },
   { id:17, sec:"Intenção e expectativa",   text:"Tem algo que você gostaria que eu soubesse sobre você antes de começar?", type:"textarea", hint:"Opcional. Mas se tiver algo relevante, me conta aqui." },
-  { id:18, sec:"A Consultoria", type:"info",
-    title:"Como funciona a reunião de consultoria",
+  { id:18, sec:"O Diagnóstico", type:"info",
+    title:"Como funciona a reunião de diagnóstico",
     body:`Ótimo! Agora que temos suas informações, veja como funciona:<br><br>
 ➡️ <b>Nosso time analisa seu perfil</b> — entendemos seu momento, desafios e objetivos.<br>
 ➡️ <b>Validamos se conseguimos te ajudar</b> — nem todo perfil é um fit, e preferimos ser honestos.<br>
-➡️ <b>Se fizer sentido, agendamos uma reunião de consultoria</b> — personalizada pro seu contexto.<br>
+➡️ <b>Se fizer sentido, agendamos uma reunião de diagnóstico</b> — personalizada pro seu contexto.<br>
 ➡️ <b>Na reunião, traçamos um plano</b> — diagnóstico + próximos passos claros pra você.<br><br>
 Nosso objetivo é garantir que você saia da reunião com clareza sobre o que fazer com IA no seu negócio.` },
-  { id:19, sec:"Qualificação", text:"Você tem disponibilidade de tempo pra participar da consultoria e executar o que for traçado?", type:"radio", req:true,
+  { id:19, sec:"Qualificação", text:"Você tem disponibilidade de tempo pra participar do diagnóstico e executar o que for traçado?", type:"radio", req:true,
     opts:["Sim, tenho tempo e energia pra isso","Tenho pouco tempo, mas dou um jeito","Não, no momento não"] },
-  { id:20, sec:"Qualificação", text:"Caso nosso time identifique que podemos te ajudar, a consultoria pode envolver um investimento na faixa de 5k a 12k. Isso faz sentido pra você nesse momento?", type:"radio", req:true,
+  { id:20, sec:"Qualificação", text:"Caso nosso time identifique que podemos te ajudar, o diagnóstico pode envolver um investimento na faixa de 5k a 12k. Isso faz sentido pra você nesse momento?", type:"radio", req:true,
     opts:["Sim, com certeza consigo","Sim, mas com planejamento","Não nesse momento"] },
   { id:21, sec:"Outra opção", type:"info",
     showIf: () => answers[20] === "Não nesse momento",
@@ -511,7 +511,7 @@ function renderClosing() {
   } else {
     tag = "Formulário enviado";
     h2  = "Recebemos suas informações! Nosso time vai analisar seu perfil e verificar se conseguimos te ajudar.";
-    p   = "Se fizer sentido, entraremos em contato para agendar sua reunião de consultoria. Fique de olho no WhatsApp! 👇";
+    p   = "Se fizer sentido, entraremos em contato para agendar sua reunião de diagnóstico. Fique de olho no WhatsApp! 👇";
     btn = `<a class="btn" style="margin-top:2rem;text-decoration:none" href="${WHATSAPP_URL}" target="_blank" rel="noopener">Falar no WhatsApp →</a>`;
   }
   el.innerHTML = `
